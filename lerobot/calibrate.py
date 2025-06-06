@@ -31,8 +31,12 @@ from pprint import pformat
 
 import draccus
 
-from lerobot.common.cameras.opencv.configuration_opencv import OpenCVCameraConfig  # noqa: F401
-from lerobot.common.cameras.realsense.configuration_realsense import RealSenseCameraConfig  # noqa: F401
+from lerobot.common.cameras.opencv.configuration_opencv import (  # noqa: F401
+    OpenCVCameraConfig,
+)
+from lerobot.common.cameras.realsense.configuration_realsense import (  # noqa: F401
+    RealSenseCameraConfig,
+)
 from lerobot.common.robots import (  # noqa: F401
     Robot,
     RobotConfig,
@@ -67,6 +71,10 @@ class CalibrateConfig:
 
 @draccus.wrap()
 def calibrate(cfg: CalibrateConfig):
+    _calibrate(cfg)
+
+
+def _calibrate(cfg: CalibrateConfig):
     init_logging()
     logging.info(pformat(asdict(cfg)))
 

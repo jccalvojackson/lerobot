@@ -39,8 +39,12 @@ import draccus
 import numpy as np
 import rerun as rr
 
-from lerobot.common.cameras.opencv.configuration_opencv import OpenCVCameraConfig  # noqa: F401
-from lerobot.common.cameras.realsense.configuration_realsense import RealSenseCameraConfig  # noqa: F401
+from lerobot.common.cameras.opencv.configuration_opencv import (  # noqa: F401
+    OpenCVCameraConfig,
+)
+from lerobot.common.cameras.realsense.configuration_realsense import (  # noqa: F401
+    RealSenseCameraConfig,
+)
 from lerobot.common.robots import (  # noqa: F401
     Robot,
     RobotConfig,
@@ -111,6 +115,10 @@ def teleop_loop(
 
 @draccus.wrap()
 def teleoperate(cfg: TeleoperateConfig):
+    _teleoperate(cfg)
+
+
+def _teleoperate(cfg: TeleoperateConfig):
     init_logging()
     logging.info(pformat(asdict(cfg)))
     if cfg.display_data:

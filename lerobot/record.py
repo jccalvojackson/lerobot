@@ -41,11 +41,13 @@ from pprint import pformat
 import numpy as np
 import rerun as rr
 
-from lerobot.common.cameras import (  # noqa: F401
-    CameraConfig,  # noqa: F401
+from lerobot.common.cameras import CameraConfig  # noqa: F401; noqa: F401
+from lerobot.common.cameras.opencv.configuration_opencv import (  # noqa: F401
+    OpenCVCameraConfig,
 )
-from lerobot.common.cameras.opencv.configuration_opencv import OpenCVCameraConfig  # noqa: F401
-from lerobot.common.cameras.realsense.configuration_realsense import RealSenseCameraConfig  # noqa: F401
+from lerobot.common.cameras.realsense.configuration_realsense import (  # noqa: F401
+    RealSenseCameraConfig,
+)
 from lerobot.common.datasets.image_writer import safe_stop_image_writer
 from lerobot.common.datasets.lerobot_dataset import LeRobotDataset
 from lerobot.common.datasets.utils import build_dataset_frame, hw_to_dataset_features
@@ -72,11 +74,7 @@ from lerobot.common.utils.control_utils import (
     sanity_check_dataset_robot_compatibility,
 )
 from lerobot.common.utils.robot_utils import busy_wait
-from lerobot.common.utils.utils import (
-    get_safe_torch_device,
-    init_logging,
-    log_say,
-)
+from lerobot.common.utils.utils import get_safe_torch_device, init_logging, log_say
 from lerobot.common.utils.visualization_utils import _init_rerun
 from lerobot.configs import parser
 from lerobot.configs.policies import PreTrainedConfig
@@ -227,6 +225,10 @@ def record_loop(
 
 @parser.wrap()
 def record(cfg: RecordConfig) -> LeRobotDataset:
+    _record(cfg)
+
+
+def _record(cfg: RecordConfig) -> LeRobotDataset:
     init_logging()
     logging.info(pformat(asdict(cfg)))
     if cfg.display_data:
