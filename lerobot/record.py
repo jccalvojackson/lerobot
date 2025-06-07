@@ -268,7 +268,10 @@ def _record(cfg: RecordConfig) -> LeRobotDataset:
         )
 
     # Load pretrained policy
-    policy = None if cfg.policy is None else make_policy(cfg.policy, ds_meta=dataset.meta)
+    from lerobot.common.datasets.lerobot_dataset import LeRobotDatasetMetadata
+
+    ds_meta = LeRobotDatasetMetadata("jccj/so100_block_in_cup_at_home_resized")
+    policy = None if cfg.policy is None else make_policy(cfg.policy, ds_meta=ds_meta)
 
     robot.connect()
     if teleop is not None:
