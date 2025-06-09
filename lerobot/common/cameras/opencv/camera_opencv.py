@@ -136,7 +136,7 @@ class OpenCVCamera(Camera):
         """Checks if the camera is currently connected and opened."""
         return isinstance(self.videocapture, cv2.VideoCapture) and self.videocapture.isOpened()
 
-    def connect(self, warmup: bool = True):
+    def connect(self, warmup: bool = False):
         """
         Connects to the OpenCV camera specified in the configuration.
 
@@ -170,8 +170,8 @@ class OpenCVCamera(Camera):
         if warmup:
             start_time = time.time()
             while time.time() - start_time < self.warmup_s:
-                self.read()
                 time.sleep(0.1)
+                self.read()
 
         logger.info(f"{self} connected.")
 
@@ -225,8 +225,8 @@ class OpenCVCamera(Camera):
     def _validate_width_and_height(self) -> None:
         """Validates and sets the camera's frame capture width and height."""
 
-        width_success = self.videocapture.set(cv2.CAP_PROP_FRAME_WIDTH, float(self.capture_width))
-        height_success = self.videocapture.set(cv2.CAP_PROP_FRAME_HEIGHT, float(self.capture_height))
+        width_success = self.videocapture.set(cv2.CAP_PROP_FRAME_WIDTH, int(self.capture_width))
+        height_success = self.videocapture.set(cv2.CAP_PROP_FRAME_HEIGHT, int(self.capture_height))
 
         actual_width = int(round(self.videocapture.get(cv2.CAP_PROP_FRAME_WIDTH)))
         if not width_success or self.capture_width != actual_width:
