@@ -22,10 +22,7 @@ from typing import Any
 from lerobot.common.cameras.utils import make_cameras_from_configs
 from lerobot.common.errors import DeviceAlreadyConnectedError, DeviceNotConnectedError
 from lerobot.common.motors import Motor, MotorCalibration, MotorNormMode
-from lerobot.common.motors.feetech import (
-    FeetechMotorsBus,
-    OperatingMode,
-)
+from lerobot.common.motors.feetech import FeetechMotorsBus, OperatingMode
 
 from ..robot import Robot
 from ..utils import ensure_safe_goal_position
@@ -143,7 +140,7 @@ class SO100Follower(Robot):
             for motor in self.bus.motors:
                 self.bus.write("Operating_Mode", motor, OperatingMode.POSITION.value)
                 # Set P_Coefficient to lower value to avoid shakiness (Default is 32)
-                self.bus.write("P_Coefficient", motor, 16)
+                self.bus.write("P_Coefficient", motor, 10)
                 # Set I_Coefficient and D_Coefficient to default value 0 and 32
                 self.bus.write("I_Coefficient", motor, 0)
                 self.bus.write("D_Coefficient", motor, 32)
