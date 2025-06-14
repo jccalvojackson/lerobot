@@ -17,9 +17,19 @@ from copy import deepcopy
 from enum import Enum
 from pprint import pformat
 
-from lerobot.common.utils.encoding_utils import decode_sign_magnitude, encode_sign_magnitude
+from lerobot.common.utils.encoding_utils import (
+    decode_sign_magnitude,
+    encode_sign_magnitude,
+)
 
-from ..motors_bus import Motor, MotorCalibration, MotorsBus, NameOrID, Value, get_address
+from ..motors_bus import (
+    Motor,
+    MotorCalibration,
+    MotorsBus,
+    NameOrID,
+    Value,
+    get_address,
+)
 from .tables import (
     FIRMWARE_MAJOR_VERSION,
     FIRMWARE_MINOR_VERSION,
@@ -231,6 +241,8 @@ class FeetechMotorsBus(MotorsBus):
 
     @property
     def is_calibrated(self) -> bool:
+        if self.calibration is not None:
+            self.write_calibration(self.calibration)
         motors_calibration = self.read_calibration()
         if set(motors_calibration) != set(self.calibration):
             return False

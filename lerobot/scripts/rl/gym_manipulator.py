@@ -63,7 +63,9 @@ from lerobot.common.teleoperators import (
     so101_leader,  # noqa: F401
 )
 from lerobot.common.teleoperators.gamepad.teleop_gamepad import GamepadTeleop
-from lerobot.common.teleoperators.keyboard.teleop_keyboard import KeyboardEndEffectorTeleop
+from lerobot.common.teleoperators.keyboard.teleop_keyboard import (
+    KeyboardEndEffectorTeleop,
+)
 from lerobot.common.utils.robot_utils import busy_wait
 from lerobot.common.utils.utils import log_say
 from lerobot.configs import parser
@@ -1343,7 +1345,7 @@ class BaseLeaderControlWrapper(gym.Wrapper):
 
         # Add intervention info
         info["is_intervention"] = is_intervention
-        info["action_intervention"] = action if is_intervention else None
+        info["action_intervention"] = torch.from_numpy(action) if is_intervention else None
 
         self.prev_leader_gripper = np.clip(
             self.robot_leader.bus.sync_read("Present_Position")["gripper"],
@@ -2102,8 +2104,11 @@ def record_dataset(env, policy, cfg):
 
             # For teleop, get action from intervention
             recorded_action = {
-                "action": info["action_intervention"].cpu().squeeze(0).float() if policy is None else action
+                "action": info["action_intervention"].cpu().squeeze(0).float()
+                if (policy is None and info["action_intervention"] is not None)
+                else action
             }
+            print(info["action_intervention"])
 
             # Process observation for dataset
             obs_processed = {k: v.cpu().squeeze(0).float() for k, v in obs.items()}
@@ -2196,6 +2201,10 @@ def replay_episode(env, cfg):
 
 @parser.wrap()
 def main(cfg: EnvConfig):
+    _main(cfg)
+
+
+def _main(cfg: EnvConfig):
     """Main entry point for the robot environment script.
 
     This function runs the robot environment in one of several modes

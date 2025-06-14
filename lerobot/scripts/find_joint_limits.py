@@ -64,6 +64,10 @@ class FindJointLimitsConfig:
 
 @draccus.wrap()
 def find_joint_and_ee_bounds(cfg: FindJointLimitsConfig):
+    _find_joint_and_ee_bounds(cfg)
+
+
+def _find_joint_and_ee_bounds(cfg: FindJointLimitsConfig):
     teleop = make_teleoperator_from_config(cfg.teleop)
     robot = make_robot_from_config(cfg.robot)
 
