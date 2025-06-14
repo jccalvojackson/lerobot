@@ -9,18 +9,21 @@ from lerobot.common.utils.utils import (
 )
 from lerobot.configs.default import DatasetConfig, WandBConfig
 from lerobot.configs.train import TrainPipelineConfig
+from lerobot.configs.policies import PreTrainedConfig
 from lerobot.scripts.train import _train
 
-repo_id = "lerobot/pusht"
+repo_id = "jccj/shape_matching2"
 
 
 # policy_config = SmolVLAConfig()
-policy_config = DiffusionConfig()
+pretrained_path = "lerobot/smolvla_base"
+policy_config = PreTrainedConfig.from_pretrained(pretrained_path)
+policy_config.pretrained_path = pretrained_path
 
 dataset_config = DatasetConfig(
     repo_id=repo_id,
     image_transforms=ImageTransformsConfig(
-        enable=False,
+        enable=True,
     ),
 )
 
